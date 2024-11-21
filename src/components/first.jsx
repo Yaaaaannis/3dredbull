@@ -3,7 +3,32 @@ import React from 'react'
 export default function First() {
     return (
         <main className="relative">
+          {/* Header */}
+          <header className="absolute top-0 w-full flex justify-between items-center py-6 px-24 z-20">
+            <button className="text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+            <button className="text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </button>
+          </header>
+
           <section className="relative h-screen w-screen flex flex-col items-center justify-center overflow-hidden font-['RedBull']">
+            {/* Traits latéraux */}
+            <div className="absolute left-0 top-[30%] flex flex-col items-end z-20">
+              <div className="w-56 h-[2px] bg-white"></div>
+              <span className="text-white mt-4 flex justify-end text-right px-6">2024</span>
+            </div>
+            
+            <div className="absolute right-0 top-[30%] flex flex-col items-start z-20">
+              <div className="w-56 h-[2px] bg-white"></div>
+              <span className="text-white mt-4 flex justify-start text-left px-6">Edition</span>
+            </div>
+
             {/* Video Background */}
             <video 
               autoPlay 
