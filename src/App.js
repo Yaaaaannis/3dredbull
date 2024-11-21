@@ -11,6 +11,7 @@ function App() {
       
       <Scene3D />
       <div className="relative z-0">
+        
         <section className="h-screen w-screen bg-transparent"></section>
         <section className="h-screen w-screen bg-black"></section>
       </div>
