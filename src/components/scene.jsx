@@ -96,9 +96,7 @@ const Scene3D = () => {
     scene.add(directionalLight1);
 
     // Deuxième lumière directionnelle (côté droit)
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight2.position.set(150, 1, 4.83); // Position à droite et légèrement en avant
-    scene.add(directionalLight2);
+
 
     // Optionnel : Ajout d'une lumière de remplissage douce depuis l'arrière
     const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
@@ -135,6 +133,18 @@ const Scene3D = () => {
 
   return (
     <>
+      {/* Video Background */}
+      <video 
+        autoPlay 
+        muted 
+        loop 
+        playsInline
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
+        style={{ filter: 'brightness(0.6)' }} // Optionnel: assombrit légèrement la vidéo
+      >
+        <source src="/assets/planete.mp4" type="video/mp4" />
+      </video>
+
       <div ref={containerRef} style={{ 
         position: 'fixed',
         top: 0,
