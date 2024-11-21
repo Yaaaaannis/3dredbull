@@ -1,7 +1,9 @@
 import './App.css';
 import Scene3D from './components/scene';
 import First from './components/first';
+
 import './index.css';
+
 function App() {
   return (
     <main className="relative">
