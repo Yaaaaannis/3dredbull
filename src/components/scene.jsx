@@ -4,13 +4,32 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollToPlugin);
 
 const Scene3D = () => {
   const containerRef = useRef(null);
   const modelRef = useRef(null);
   const textContainerRef = useRef(null);
+
+  // Déplacer les fonctions en dehors du useEffect
+  const scrollDown = () => {
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: `+=${window.innerHeight}`,
+      ease: "power2.inOut"
+    });
+  };
+
+  const scrollUp = () => {
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: `-=${window.innerHeight}`,
+      ease: "power2.inOut"
+    });
+  };
 
   useEffect(() => {
     // Initialisation de Lenis
@@ -147,6 +166,7 @@ const Scene3D = () => {
           start: 'top center',
           end: 'bottom center',
           toggleActions: 'play none none reverse',
+          
         }
       }
     );
@@ -245,17 +265,27 @@ const Scene3D = () => {
       </video>
 
       {/* Conteneur pour tous les textes */}
-      <div ref={textContainerRef} className="fixed w-full h-full pointer-events-none">
+      <div ref={textContainerRef} className="fixed w-full h-full z-[2] ">
         {/* Titre en haut à gauche */}
-        <div className="fixed top-40 left-[20%] z-20 pointer-events-auto">
+        <div className="fixed top-40 left-[20%]  ">
           <h1 className="text-5xl text-white title font-demibold">
             Cosmic <span className="text-[#4C4A90]">Berry</span>
           </h1>
         </div>
 
         {/* Textes à droite */}
-        <div className="fixed right-24 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-8 max-w-md pointer-events-auto">
-          <p className="text-white text-xl main-text">
+        <div className="fixed right-24 top-[55%] z-20 flex flex-col gap-8 max-w-md">
+          <p 
+            className="text-white text-xl main-text mb-8  transition-transform duration-300"
+            onMouseEnter={() => {
+              gsap.to('.main-text', { scale: 1.15, duration: 0.2 });
+              gsap.to('.description', { scale: 0.9, duration: 0.2 });
+            }}
+            onMouseLeave={() => {
+              gsap.to('.main-text', { scale: 1, duration: 0.2 });
+              gsap.to('.description', { scale: 1, duration: 0.2 });
+            }}
+          >
             Un délicieux mélange avec des fruits 
             <span className="text-[#4C4A90]"> mystérieux </span> 
             de galaxies lointaines
@@ -263,18 +293,28 @@ const Scene3D = () => {
 
           <div className="w-full h-[2px] bg-white separator"></div>
 
-          <p className="text-white description text-xl">
+          <p 
+            className="text-white description text-xl mt-4  transition-transform duration-300"
+            onMouseEnter={() => {
+              gsap.to('.description', { scale: 1.15, duration: 0.2 });
+              gsap.to('.main-text', { scale: 0.9, duration: 0.2 });
+            }}
+            onMouseLeave={() => {
+              gsap.to('.description', { scale: 1, duration: 0.2 });
+              gsap.to('.main-text', { scale: 1, duration: 0.2 });
+            }}
+          >
             Mélange de <span className="text-[#4C4A90]">myrtille</span>, 
             <span className="text-[#4C4A90]"> mûre </span> 
             et <span className="text-[#4C4A90]">grenade</span> avec une pointe pétillante évoquant l'infini
           </p>
 
           {/* Conteneur pour le bouton et le trait */}
-          <div className="flex items-center gap-4">
-            <button className="flex-1 text-white/70 text-left hover:text-white border border-white/30 hover:border-white/70 bg-transparent px-6 py-3 transition-all duration-300 cta-button flex items-center rounded-full">
+          <div className="flex items-center justify-between pt-12">
+            <button className="text-white/70 text-left hover:text-white border border-white/30 hover:border-white/70 bg-transparent px-6 py-3 transition-all duration-300 cta-button rounded-lg cursor-pointer w-fit ">
               En savoir plus
             </button>
-            <div className="flex-1 h-[2px] bg-white button-separator"></div>
+            <div className="h-[2px] bg-white button-separator w-[207px]"></div>
           </div>
         </div>
       </div>
@@ -290,6 +330,49 @@ const Scene3D = () => {
       }}>
       </div>
       <div className="second-section" style={{ height: '200vh' }}></div>
+
+      {/* Navigation Arrows */}
+      <div className="fixed bottom-12 left-20 z-30 flex flex-col gap-4">
+        <button 
+          onClick={scrollUp}
+          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:border-white/70 transition-all duration-300"
+        >
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            className="rotate-180"
+          >
+            <path 
+              d="M12 5V19M12 19L19 12M12 19L5 12" 
+              stroke="white" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+        <button 
+          onClick={scrollDown}
+          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:border-white/70 transition-all duration-300"
+        >
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none"
+          >
+            <path 
+              d="M12 5V19M12 19L19 12M12 19L5 12" 
+              stroke="white" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
     </>
   );
 };

@@ -10,7 +10,7 @@ function App() {
       <First />
       
       <Scene3D />
-      <div className="relative z-0">
+      <div className="relative z-[1]">
         
         <section className="h-screen w-screen bg-transparent"></section>
         <section className="h-screen w-screen bg-black"></section>
