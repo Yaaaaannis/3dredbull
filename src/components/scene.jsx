@@ -66,8 +66,17 @@ const Scene3D = () => {
       // Position initiale du modèle
       model.position.set(0, 0, 4.3);
       model.scale.set(1, 1, 1);
-      // Rotation initiale (180 degrés = Math.PI)
       model.rotation.y = Math.PI;
+
+      // Animation légère de rotation
+      gsap.to(model.rotation, {
+        x: '+=0.05',
+        z: '+=0.05',
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut"
+      });
 
       // Animation avec GSAP et ScrollTrigger
       const tl = gsap.timeline({
@@ -103,19 +112,36 @@ const Scene3D = () => {
         }
       });
 
+      // Animation de flottement
+      const floatingTl = gsap.timeline({
+        repeat: -1,
+        yoyo: true
+      });
+      
+      floatingTl.to(model.position, {
+        y: '-=0.01',
+        duration: 2,
+        ease: "power1.inOut"
+      });
+
       // Animation combinée : position et rotation
       tl.to(model.position, {
         z: 4.83,
         y: -0.09,
         duration: 1,
-        ease: "power2.inOut"
+        ease: "power2.inOut",
+        onUpdate: () => {
+          // Mettre à jour la base de l'animation de flottement
+          floatingTl.invalidate().restart();
+        }
       })
       .to(model.rotation, {
-        y: 0, // Retour à 0 = rotation de 180 degrés
+        y: 0,
         duration: 1,
         ease: "power2.inOut"
-      }, "<"); // Le "<" fait démarrer cette animation en même temps que la précédente
+      }, "<");
     });
+    
 
     // Éclairage
     // Lumière ambiante réduite pour plus de contraste
@@ -296,7 +322,7 @@ const Scene3D = () => {
         </div>
 
         {/* Textes à droite */}
-        <div className="fixed right-24 top-[55%] z-20 flex flex-col gap-8 max-w-md">
+        <div className="fixed right-24 top-[50%] z-20 flex flex-col gap-8 max-w-md">
           <p 
             className="text-white text-xl main-text mb-8  transition-transform duration-300"
             onMouseEnter={() => {
