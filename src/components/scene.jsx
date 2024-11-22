@@ -74,7 +74,7 @@ const Scene3D = () => {
         scrollTrigger: {
           trigger: '.second-section',
           start: 'top top',
-          end: `+=${window.innerHeight * 2}`,
+          end: 'bottom center',
           scrub: true,
           onEnter: () => {
             gsap.to(containerRef.current, {
@@ -82,9 +82,21 @@ const Scene3D = () => {
               duration: 0.5
             });
           },
+          onLeave: () => {
+            gsap.to(containerRef.current, {
+              opacity: 0,
+              duration: 0.5
+            });
+          },
           onLeaveBack: () => {
             gsap.to(containerRef.current, {
               opacity: 0,
+              duration: 0.5
+            });
+          },
+          onEnterBack: () => {
+            gsap.to(containerRef.current, {
+              opacity: 1,
               duration: 0.5
             });
           }
@@ -152,6 +164,38 @@ const Scene3D = () => {
     const button = textContainerRef.current.querySelector('.cta-button');
     const buttonSeparator = textContainerRef.current.querySelector('.button-separator');
 
+    // Configuration commune du ScrollTrigger pour tous les éléments
+    const commonScrollTrigger = {
+      trigger: '.second-section',
+      start: 'top center',
+      end: 'bottom center',
+      toggleActions: 'play none none reverse',
+      onEnter: () => {
+        gsap.to(textContainerRef.current, {
+          opacity: 1,
+          duration: 0.5
+        });
+      },
+      onLeave: () => {
+        gsap.to(textContainerRef.current, {
+          opacity: 0,
+          duration: 0.5
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(textContainerRef.current, {
+          opacity: 0,
+          duration: 0.5
+        });
+      },
+      onEnterBack: () => {
+        gsap.to(textContainerRef.current, {
+          opacity: 1,
+          duration: 0.5
+        });
+      }
+    };
+
     gsap.fromTo([title],
       { 
         opacity: 0,
@@ -161,15 +205,10 @@ const Scene3D = () => {
         opacity: 1,
         x: 0,
         duration: 0.8,
-        scrollTrigger: {
-          trigger: textContainerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-          
-        }
+        scrollTrigger: commonScrollTrigger
       }
     );
+
     gsap.fromTo([separator, buttonSeparator],
       { 
         opacity: 0,
@@ -179,14 +218,10 @@ const Scene3D = () => {
         opacity: 1,
         x: 0,
         duration: 0.8,
-        scrollTrigger: {
-          trigger: textContainerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-        }
+        scrollTrigger: commonScrollTrigger
       }
     );
+
     gsap.fromTo([mainText],
       { 
         opacity: 0,
@@ -197,15 +232,11 @@ const Scene3D = () => {
         x: 0,
         duration: 1,
         delay: 0.4,
-        scrollTrigger: {
-          trigger: textContainerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-        }
+        scrollTrigger: commonScrollTrigger
       }
     );
-    gsap.fromTo([description,],
+
+    gsap.fromTo([description],
       { 
         opacity: 0,
         x: 100
@@ -215,14 +246,10 @@ const Scene3D = () => {
         x: 0,
         duration: 1.2,
         delay: 0.4,
-        scrollTrigger: {
-          trigger: textContainerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-        }
+        scrollTrigger: commonScrollTrigger
       }
     );
+
     gsap.fromTo(button,
       { 
         opacity: 0,
@@ -232,13 +259,8 @@ const Scene3D = () => {
         opacity: 1,
         y: 0,
         duration: 0.8,
-        delay: 1, // Délai plus long pour le bouton
-        scrollTrigger: {
-          trigger: textContainerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-        }
+        delay: 1,
+        scrollTrigger: commonScrollTrigger
       }
     );
 
@@ -267,8 +289,8 @@ const Scene3D = () => {
       {/* Conteneur pour tous les textes */}
       <div ref={textContainerRef} className="fixed w-full h-full z-[2] ">
         {/* Titre en haut à gauche */}
-        <div className="fixed top-40 left-[20%]  ">
-          <h1 className="text-5xl text-white title font-demibold">
+        <div className="fixed top-40 left-[17%]  ">
+          <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
             Cosmic <span className="text-[#4C4A90]">Berry</span>
           </h1>
         </div>
