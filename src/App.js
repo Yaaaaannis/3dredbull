@@ -11,7 +11,7 @@ function App() {
       <main className="relative">
         <First />
         <Scene3D />
-        <section className="h-[200vh] w-screen bg-transparent second-section"></section>
+        <section className="h-[10vh] w-screen bg-transparent second-section"></section>
         <section className="relative w-screen cloud-section">
           <Cloud />
         </section>
