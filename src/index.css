@@ -31,6 +31,12 @@ canvas {
   font-weight: 700;
   font-style: normal;
 }
+@font-face {
+  font-family: "RedBull2";
+  src: url("./fonts/SansSerifExbFLF.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
 
 h1 {
   font-family: "Montserrat", sans-serif;
