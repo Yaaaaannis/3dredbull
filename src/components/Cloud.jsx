@@ -23,7 +23,7 @@ const Cloud = () => {
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top center',
-        end: '+=80%',
+        end: '+=70%',
         scrub: 1,
 
         onEnter: () => {
@@ -163,9 +163,9 @@ const Cloud = () => {
         <div 
           className="absolute inset-0 z-50" 
           style={{ 
-            pointerEvents: 'none',
             height: '100vh',
-            width: '100vw'
+            width: '100vw',
+            pointerEvents: 'auto'
           }}
         >
           <SkyScene />

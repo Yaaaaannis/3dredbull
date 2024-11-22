@@ -32,18 +32,6 @@ const Scene3D = () => {
   };
 
   useEffect(() => {
-    // Initialisation de Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      smoothWheel: true
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     // Configuration de Three.js
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -195,7 +183,8 @@ const Scene3D = () => {
       trigger: '.second-section',
       start: 'top center',
       end: 'bottom center',
-      toggleActions: 'play none none reverse',
+      toggleActions: 'play reverse play reverse',
+      scrub: 1,
       onEnter: () => {
         gsap.to(textContainerRef.current, {
           opacity: 1,
@@ -208,15 +197,15 @@ const Scene3D = () => {
           duration: 0.5
         });
       },
-      onLeaveBack: () => {
-        gsap.to(textContainerRef.current, {
-          opacity: 0,
-          duration: 0.5
-        });
-      },
       onEnterBack: () => {
         gsap.to(textContainerRef.current, {
           opacity: 1,
+          duration: 0.5
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(textContainerRef.current, {
+          opacity: 0,
           duration: 0.5
         });
       }
@@ -231,7 +220,10 @@ const Scene3D = () => {
         opacity: 1,
         x: 0,
         duration: 0.8,
-        scrollTrigger: commonScrollTrigger
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
       }
     );
 
@@ -244,7 +236,10 @@ const Scene3D = () => {
         opacity: 1,
         x: 0,
         duration: 0.8,
-        scrollTrigger: commonScrollTrigger
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
       }
     );
 
@@ -258,7 +253,10 @@ const Scene3D = () => {
         x: 0,
         duration: 1,
         delay: 0.4,
-        scrollTrigger: commonScrollTrigger
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
       }
     );
 
@@ -272,7 +270,10 @@ const Scene3D = () => {
         x: 0,
         duration: 1.2,
         delay: 0.4,
-        scrollTrigger: commonScrollTrigger
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
       }
     );
 
@@ -286,14 +287,16 @@ const Scene3D = () => {
         y: 0,
         duration: 0.8,
         delay: 1,
-        scrollTrigger: commonScrollTrigger
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
       }
     );
 
     return () => {
       window.removeEventListener('resize', handleResize);
       containerRef.current?.removeChild(renderer.domElement);
-      lenis.destroy();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);

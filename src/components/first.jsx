@@ -79,3 +79,43 @@ export default function First() {
     </section>
   );
 }
+
+// Curseur avec un cercle qui pulse pour représenter l'énergie
+const CustomCursor = () => {
+  const cursorRef = useRef(null);
+  
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    
+    const moveCursor = (e) => {
+      gsap.to(cursor, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.1
+      });
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+    
+    // Animation de pulse continue
+    gsap.to(cursor, {
+      scale: 1.2,
+      duration: 0.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut"
+    });
+
+    return () => {
+      window.removeEventListener('mousemove', moveCursor);
+    };
+  }, []);
+
+  return (
+    <div 
+      ref={cursorRef}
+      className="fixed w-6 h-6 rounded-full border-2 border-red-500 pointer-events-none z-50 mix-blend-difference"
+      style={{ transform: 'translate(-50%, -50%)' }}
+    />
+  );
+};

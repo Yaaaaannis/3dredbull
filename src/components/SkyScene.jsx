@@ -6,6 +6,7 @@ import gsap from 'gsap';
 const SkyScene = () => {
   const containerRef = useRef(null);
   const modelRef = useRef(null);
+  const animationRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -44,8 +45,8 @@ const SkyScene = () => {
       model.scale.set(1, 1, 1);
       model.rotation.set(0, Math.PI, -0.5);
 
-      // Animation légère de rotation continue
-      gsap.to(model.rotation, {
+      // Animation de base
+      animationRef.current = gsap.to(model.rotation, {
         x: '+=0.05',
         z: '+=0.05',
         duration: 3,
@@ -99,6 +100,58 @@ const SkyScene = () => {
         duration: 2,
         ease: "power3.inOut"
       }, "<");
+
+      const handleMouseEnter = () => {
+        // Pause l'animation de base
+        animationRef.current.pause();
+        
+        gsap.to(model.rotation, {
+          x: model.rotation.x + 0.3,
+          z: model.rotation.z + 0.3,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+        gsap.to(model.scale, {
+          x: 1.15,
+          y: 1.15,
+          z: 1.15,
+          duration: 0.4,
+          ease: "back.out(1.7)"
+        });
+      };
+
+      const handleMouseLeave = () => {
+        // Reprend l'animation de base
+        animationRef.current.resume();
+        
+        gsap.to(model.rotation, {
+          x: model.rotation.x,
+          z: model.rotation.z,
+          duration: 0.5,
+          ease: "power2.inOut"
+        });
+        gsap.to(model.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: 0.4,
+          ease: "back.out(1.7)"
+        });
+      };
+
+      // Ajout des événements avec capture
+      containerRef.current.addEventListener('mouseenter', handleMouseEnter, true);
+      containerRef.current.addEventListener('mouseleave', handleMouseLeave, true);
+
+      return () => {
+        if (containerRef.current) {
+          containerRef.current.removeEventListener('mouseenter', handleMouseEnter, true);
+          containerRef.current.removeEventListener('mouseleave', handleMouseLeave, true);
+        }
+        if (animationRef.current) {
+          animationRef.current.kill();
+        }
+      };
     });
 
     const animate = () => {
@@ -133,7 +186,10 @@ const SkyScene = () => {
         position: 'absolute',
         top: 0,
         left: 0,
-        opacity: 0
+        opacity: 0,
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+        touchAction: 'none'
       }}
     />
   );
