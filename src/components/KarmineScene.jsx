@@ -112,7 +112,7 @@ const KarmineScene = () => {
             modelRef.current.position.y = gsap.utils.interpolate(-2, -0.09, progress);
             modelRef.current.position.z = gsap.utils.interpolate(4.3, 4.83, progress);
 
-            modelRef.current.rotation.y = gsap.utils.interpolate(0, Math.PI * 2, progress);
+            modelRef.current.rotation.y = gsap.utils.interpolate(0, Math.PI * 4, progress);
 
 
             // Mise à jour de la base de l'animation de flottement
