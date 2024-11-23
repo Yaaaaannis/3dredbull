@@ -84,7 +84,7 @@ const KarmineScene = () => {
       modelRef.current = model;
       scene.add(model);
 
-      // Animation de flottement constante
+      // Animation de flottement identique à SkyScene
       const floatingTl = gsap.timeline({
         repeat: -1,
         yoyo: true
@@ -109,6 +109,9 @@ const KarmineScene = () => {
             // Animation de montée
             modelRef.current.position.y = gsap.utils.interpolate(-2, -0.09, progress);
             modelRef.current.position.z = gsap.utils.interpolate(4.3, 4.83, progress);
+
+            // Mise à jour de la base de l'animation de flottement
+            floatingTl.invalidate().restart();
 
             // Intensité des lumières
             const spotlightIntensity = gsap.utils.interpolate(0, 25, progress);
