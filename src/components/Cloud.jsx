@@ -32,6 +32,8 @@ const Cloud = () => {
             duration: 0.5
           });
         },
+      
+        
       }
     });
 
@@ -80,6 +82,25 @@ const Cloud = () => {
         '<+=0.1'
       );
 
+    // Ajout du ScrollTrigger pour gérer la visibilité des textes
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: 'top center',
+      end: 'bottom center',
+      onEnter: () => {
+        gsap.to(textContainerRef.current, { visibility: 'visible', duration: 0 });
+      },
+      onLeave: () => {
+        gsap.to(textContainerRef.current, { visibility: 'hidden', duration: 0 });
+      },
+      onEnterBack: () => {
+        gsap.to(textContainerRef.current, { visibility: 'visible', duration: 0 });
+      },
+      onLeaveBack: () => {
+        gsap.to(textContainerRef.current, { visibility: 'hidden', duration: 0 });
+      }
+    });
+
     return () => {
       mainTl.kill();
       textsTl.kill();
@@ -90,7 +111,7 @@ const Cloud = () => {
   return (
     <div 
       ref={containerRef} 
-      className="min-h-[180vh] w-full bg-transparent relative font-redbull2"
+      className="min-h-[180vh] w-full bg-transparent relative font-redbull2 z-100 fixed"
       style={{ opacity: 0 }}
     >
       {/* Conteneur pour les textes */}
