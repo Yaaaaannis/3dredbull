@@ -80,7 +80,8 @@ const KarmineScene = () => {
       const model = gltf.scene;
       model.position.set(0, -2, 4.3);
       model.scale.set(1, 1, 1);
-      model.rotation.set(0, 0, 0);
+ 
+
       modelRef.current = model;
       scene.add(model);
 
@@ -101,6 +102,7 @@ const KarmineScene = () => {
         trigger: containerRef.current,
         start: 'top+=20% center',
         end: '+=80%',
+        duration: 2,
         scrub: 1,
         onUpdate: (self) => {
           const progress = self.progress;
@@ -109,6 +111,9 @@ const KarmineScene = () => {
             // Animation de montée
             modelRef.current.position.y = gsap.utils.interpolate(-2, -0.09, progress);
             modelRef.current.position.z = gsap.utils.interpolate(4.3, 4.83, progress);
+
+            modelRef.current.rotation.y = gsap.utils.interpolate(0, Math.PI * 2, progress);
+
 
             // Mise à jour de la base de l'animation de flottement
             floatingTl.invalidate().restart();

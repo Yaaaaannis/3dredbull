@@ -8,17 +8,18 @@ import Karmine from './components/Karmine';
 import './index.css';
 
 function App() {
-  // Configuration de Lenis
+  // Configuration de Lenis avec des paramètres plus smooth
   const lenisOptions = {
-    duration: 1.2,
+    duration: 1.4, // Augmenté de 1.2 à 2.4 pour un scroll plus long
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing personnalisé
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    wheelMultiplier: 1,
-    smoothTouch: false,
-    touchMultiplier: 2,
+    wheelMultiplier: 0.8, // Réduit de 1 à 0.8 pour plus de smoothness
+    smoothTouch: true, // Activé pour les appareils tactiles
+    touchMultiplier: 1.5, // Réduit pour plus de contrôle
     infinite: false,
+    lerp: 0.1, // Ajout d'un lerp pour un effet plus smooth
   }
 
   return (
