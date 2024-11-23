@@ -78,11 +78,23 @@ const KarmineScene = () => {
     const loader = new GLTFLoader();
     loader.load('/assets/redbull.glb', (gltf) => {
       const model = gltf.scene;
-      model.position.set(0, -2, 4.3); // Position initiale en bas
+      model.position.set(0, -2, 4.3);
       model.scale.set(1, 1, 1);
-      model.rotation.set(0, 0, 0); // Canette droite
+      model.rotation.set(0, 0, 0);
       modelRef.current = model;
       scene.add(model);
+
+      // Animation de flottement constante
+      const floatingTl = gsap.timeline({
+        repeat: -1,
+        yoyo: true
+      });
+      
+      floatingTl.to(model.position, {
+        y: '-=0.01',
+        duration: 2.5,
+        ease: "sine.inOut"
+      });
 
       // Animation avec ScrollTrigger
       ScrollTrigger.create({
@@ -90,12 +102,6 @@ const KarmineScene = () => {
         start: 'top+=20% center',
         end: '+=80%',
         scrub: 1,
-        onEnter: () => {
-          gsap.to(containerRef.current, {
-            opacity: 1,
-            duration: 0.5
-          });
-        },
         onUpdate: (self) => {
           const progress = self.progress;
           
