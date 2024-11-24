@@ -41,65 +41,128 @@ const Karmine = () => {
       ease: 'none',
     });
 
-    // Timeline pour les textes
-    const textsTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top+=20% center',
-        end: '+=60%',
-        scrub: 1,
-      }
-    });
-
-    textsTl
-      .fromTo('.title',
-        { opacity: 0, x: -100 },
-        { opacity: 1, x: 0 },
-        '+=0.5'
-      )
-      .fromTo(['.separator', '.button-separator'],
-        { opacity: 0, x: 100 },
-        { opacity: 1, x: 0 },
-        '<+=0.1'
-      )
-      .fromTo('.main-text',
-        { opacity: 0, x: 100 },
-        { opacity: 1, x: 0 },
-        '<+=0.1'
-      )
-      .fromTo('.description',
-        { opacity: 0, x: 100 },
-        { opacity: 1, x: 0 },
-        '<+=0.1'
-      )
-      .fromTo('.cta-button',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0 },
-        '<+=0.1'
-      );
-
-    // Ajout du ScrollTrigger pour gérer la visibilité des textes
-    ScrollTrigger.create({
+    // Configuration commune du ScrollTrigger pour tous les éléments
+    const commonScrollTrigger = {
       trigger: containerRef.current,
       start: 'top center',
       end: 'bottom center',
+      toggleActions: 'play reverse play reverse',
+      scrub: 1,
       onEnter: () => {
-        gsap.to(textContainerRef.current, { visibility: 'visible', duration: 0 });
+        gsap.to(textContainerRef.current, {
+          opacity: 1,
+          visibility: 'visible',
+          duration: 0.5
+        });
       },
       onLeave: () => {
-        gsap.to(textContainerRef.current, { visibility: 'hidden', duration: 0 });
+        gsap.to(textContainerRef.current, {
+          opacity: 0,
+          visibility: 'hidden',
+          duration: 0.5
+        });
       },
       onEnterBack: () => {
-        gsap.to(textContainerRef.current, { visibility: 'visible', duration: 0 });
+        gsap.to(textContainerRef.current, {
+          opacity: 1,
+          visibility: 'visible',
+          duration: 0.5
+        });
       },
       onLeaveBack: () => {
-        gsap.to(textContainerRef.current, { visibility: 'hidden', duration: 0 });
+        gsap.to(textContainerRef.current, {
+          opacity: 0,
+          visibility: 'hidden',
+          duration: 0.5
+        });
       }
-    });
+    };
+
+    gsap.fromTo(['.title'],
+      { 
+        opacity: 0,
+        x: -100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
+      }
+    );
+
+    gsap.fromTo(['.separator', '.button-separator'],
+      { 
+        opacity: 0,
+        x: 100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
+      }
+    );
+
+    gsap.fromTo(['.main-text'],
+      { 
+        opacity: 0,
+        x: 100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        delay: 0.4,
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
+      }
+    );
+
+    gsap.fromTo(['.description'],
+      { 
+        opacity: 0,
+        x: 100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        delay: 0.4,
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
+      }
+    );
+
+    gsap.fromTo('.cta-button',
+      { 
+        opacity: 0,
+        y: 20 
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 1,
+        scrollTrigger: {
+          ...commonScrollTrigger,
+          scrub: 1
+        }
+      }
+    );
 
     return () => {
       mainTl.kill();
-      textsTl.kill();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -135,7 +198,7 @@ const Karmine = () => {
             L'énergie pure de la <span className="text-[#3ad6ff]">compétition</span> dans une canette explosive
           </p>
 
-          <div className="w-[500px] h-[2px] bg-white separator"></div>
+          <div className="w-[600px] h-[2px] bg-white separator"></div>
 
           <p 
             className="text-white description text-xl mt-4 transition-transform duration-300"

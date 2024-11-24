@@ -33,6 +33,20 @@ const SkyScene = () => {
 
     camera.position.z = 5;
 
+    // Lumière latérale gauche
+    const leftLight = new THREE.SpotLight(0xffffff, 0);
+    leftLight.position.set(-2, 0, 5);
+    leftLight.angle = Math.PI / 6;
+    leftLight.penumbra = 0.3;
+    leftLight.distance = 10;
+    scene.add(leftLight);
+
+    // Target pour la lumière latérale
+    const leftLightTarget = new THREE.Object3D();
+    leftLightTarget.position.set(-0.05, -0.09, 4.83); // Position finale de la canette
+    scene.add(leftLightTarget);
+    leftLight.target = leftLightTarget;
+
     // Chargement de la canette
     const loader = new GLTFLoader();
     loader.load('/assets/redbull.glb', (gltf) => {
@@ -90,7 +104,9 @@ const SkyScene = () => {
         x: -0.05,
         duration: 3,
         ease: "power3.inOut",
-        onUpdate: () => {
+        onUpdate: function() {
+          // Utiliser this.progress() au lieu de self.progress
+          leftLight.intensity = gsap.utils.interpolate(0, 1.5, this.progress());
           // Mettre à jour la base de l'animation de flottement
           floatingTl.invalidate().restart();
         }
