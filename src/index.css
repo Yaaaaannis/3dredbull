@@ -47,3 +47,8 @@ h1 {
   background-size: 100% 100%;
   background-position: 0% 0%;
 }
+.custom-cursor {
+  pointer-events: none !important;
+  user-select: none !important;
+  will-change: transform;
+}

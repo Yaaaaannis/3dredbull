@@ -50,6 +50,35 @@ const Scene3D = () => {
     const mouse = new Vector2();
     let isHovered = false;
 
+    // Gestionnaire de hover unifié
+    const handleMouseMove = (event) => {
+      if (!modelRef.current) return;
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(modelRef.current, true);
+
+      if (intersects.length > 0 && !isHovered) {
+        isHovered = true;
+        document.body.style.cursor = 'pointer';
+        
+        // Animation de la canette
+        gsap.to(modelRef.current.rotation, {
+          y: modelRef.current.rotation.y + Math.PI * 2,
+          duration: 1,
+          ease: "power2.inOut"
+        });
+      } else if (intersects.length === 0 && isHovered) {
+        isHovered = false;
+        document.body.style.cursor = 'default';
+      }
+    };
+
+    // Ajouter l'écouteur d'événements
+    window.addEventListener('mousemove', handleMouseMove);
+
     // Chargement du modèle GLB
     const loader = new GLTFLoader();
     loader.load('/assets/redbull.glb', (gltf) => {
@@ -132,34 +161,6 @@ const Scene3D = () => {
         duration: 1,
         ease: "power2.inOut"
       }, "<");
-
-      // Déclare onMouseMove en dehors du loader
-      const onMouseMove = (event) => {
-        if (!modelRef.current) return;
-
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera);
-
-        const intersects = raycaster.intersectObject(modelRef.current, true);
-
-        if (intersects.length > 0 && !isHovered) {
-          isHovered = true;
-          document.body.style.cursor = 'pointer';
-          gsap.to(modelRef.current.rotation, {
-            y: modelRef.current.rotation.y + Math.PI * 2,
-            duration: 1,
-            ease: "power2.inOut"
-          });
-        } else if (intersects.length === 0 && isHovered) {
-          isHovered = false;
-          document.body.style.cursor = 'default';
-        }
-      };
-
-      // Ajoute l'écouteur d'événement
-      window.addEventListener('mousemove', onMouseMove);
     });
     
 
@@ -364,10 +365,12 @@ const Scene3D = () => {
     // Cleanup function
     return () => {
       document.body.style.cursor = 'default';
-     
-      window.removeEventListener('click', onClick); // Ajout du cleanup pour le clic
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('click', onClick);
       window.removeEventListener('resize', handleResize);
-      containerRef.current?.removeChild(renderer.domElement);
+      if (containerRef.current && renderer.domElement) {
+        containerRef.current.removeChild(renderer.domElement);
+      }
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
