@@ -148,17 +148,29 @@ const KarmineScene = () => {
     });
 
     // Fonctions de hover
-    const handleMouseEnter = () => {
-      isHovered.current = true;
-      
-      if (modelRef.current) {
-        // Animation de scale
-        gsap.to(modelRef.current.scale, {
-          x: 1.1,
-          y: 1.1,
-          z: 1.1,
-          duration: 0.5,
-          ease: "power2.out"
+    const handleMouseMove = (event) => {
+      if (!modelRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const mouse = {
+        x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((event.clientY - rect.top) / rect.height) * 2 + 1
+      };
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObject(modelRef.current, true);
+
+      if (intersects.length > 0 && !isHovered.current) {
+        isHovered.current = true;
+        document.body.style.cursor = 'pointer';
+        
+        // Animation de rotation au hover
+        gsap.to(modelRef.current.rotation, {
+          y: modelRef.current.rotation.y + Math.PI * 2,
+          duration: 1,
+          ease: "power2.inOut"
         });
 
         // Intensification des lumières
@@ -174,22 +186,10 @@ const KarmineScene = () => {
             duration: 0.5
           });
         }
-      }
-    };
-
-    const handleMouseLeave = () => {
-      isHovered.current = false;
-      
-      if (modelRef.current) {
-        // Retour à la scale normale
-        gsap.to(modelRef.current.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 0.5,
-          ease: "power2.out"
-        });
-
+      } else if (intersects.length === 0 && isHovered.current) {
+        isHovered.current = false;
+        document.body.style.cursor = 'default';
+        
         // Retour à l'intensité normale des lumières
         if (spotlightRef.current) {
           gsap.to(spotlightRef.current, {
@@ -206,26 +206,86 @@ const KarmineScene = () => {
       }
     };
 
-    const handleMouseMove = (event) => {
-      if (!isHovered.current || !modelRef.current) return;
+    // Ajouter la fonction de clic
+    const handleClick = (event) => {
+      if (!modelRef.current) return;
 
       const rect = containerRef.current.getBoundingClientRect();
-      const mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      const mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      const mouse = {
+        x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((event.clientY - rect.top) / rect.height) * 2 + 1
+      };
 
-      // Rotation douce suivant la souris
-      gsap.to(modelRef.current.rotation, {
-        x: mouseY * 0.1,
-        y: mouseX * 0.1,
-        duration: 0.5,
-        ease: "power2.out"
-      });
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObject(modelRef.current, true);
+
+      if (intersects.length > 0) {
+        const initialPos = {
+          x: modelRef.current.position.x,
+          y: modelRef.current.position.y,
+          z: modelRef.current.position.z
+        };
+
+        // Timeline pour le shake
+        gsap.timeline()
+          // Séquence de shakes rapides
+          .to(modelRef.current.position, {
+            x: initialPos.x - 0.02,
+            y: initialPos.y + 0.02,
+            duration: 0.05,
+            ease: "none"
+          })
+          .to(modelRef.current.position, {
+            x: initialPos.x + 0.02,
+            y: initialPos.y - 0.02,
+            duration: 0.05,
+            ease: "none"
+          })
+          .to(modelRef.current.position, {
+            x: initialPos.x - 0.015,
+            y: initialPos.y + 0.015,
+            duration: 0.05,
+            ease: "none"
+          })
+          .to(modelRef.current.position, {
+            x: initialPos.x + 0.015,
+            y: initialPos.y - 0.015,
+            duration: 0.05,
+            ease: "none"
+          })
+          .to(modelRef.current.position, {
+            x: initialPos.x - 0.01,
+            y: initialPos.y + 0.01,
+            duration: 0.05,
+            ease: "none"
+          })
+          .to(modelRef.current.position, {
+            x: initialPos.x,
+            y: initialPos.y,
+            duration: 0.05,
+            ease: "none"
+          })
+          // Petit saut final
+          .to(modelRef.current.position, {
+            y: initialPos.y + 0.05,
+            x: initialPos.x - 0.025,
+            duration: 0.2,
+            ease: "power2.out"
+          })
+          .to(modelRef.current.position, {
+            y: initialPos.y,
+            x: initialPos.x,
+            duration: 0.1,
+            ease: "bounce.out"
+          });
+      }
     };
 
     // Ajout des event listeners
-    containerRef.current.addEventListener('mouseenter', handleMouseEnter);
-    containerRef.current.addEventListener('mouseleave', handleMouseLeave);
     containerRef.current.addEventListener('mousemove', handleMouseMove);
+    containerRef.current.addEventListener('click', handleClick);
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -242,9 +302,8 @@ const KarmineScene = () => {
       }
       renderer.dispose();
       // Cleanup des event listeners
-      containerRef.current?.removeEventListener('mouseenter', handleMouseEnter);
-      containerRef.current?.removeEventListener('mouseleave', handleMouseLeave);
       containerRef.current?.removeEventListener('mousemove', handleMouseMove);
+      containerRef.current?.removeEventListener('click', handleClick);
     };
   }, []);
 

@@ -47,6 +47,11 @@ const SkyScene = () => {
     scene.add(leftLightTarget);
     leftLight.target = leftLightTarget;
 
+    // Ajout du Raycaster
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let isHovered = false;
+
     // Chargement de la canette
     const loader = new GLTFLoader();
     loader.load('/assets/redbull.glb', (gltf) => {
@@ -117,56 +122,127 @@ const SkyScene = () => {
         ease: "power3.inOut"
       }, "<");
 
-      const handleMouseEnter = () => {
-        // Pause l'animation de base
-        animationRef.current.pause();
-        
-        gsap.to(model.rotation, {
-          x: model.rotation.x + 0.3,
-          z: model.rotation.z + 0.3,
-          duration: 0.5,
-          ease: "power2.out"
-        });
-        gsap.to(model.scale, {
-          x: 1.15,
-          y: 1.15,
-          z: 1.15,
-          duration: 0.4,
-          ease: "back.out(1.7)"
-        });
+      // Remplacer les anciens événements mouseenter/mouseleave par onMouseMove
+      const onMouseMove = (event) => {
+        if (!modelRef.current) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(modelRef.current, true);
+
+        if (intersects.length > 0 && !isHovered) {
+          isHovered = true;
+          document.body.style.cursor = 'pointer';
+          animationRef.current.pause();
+          
+          gsap.to(modelRef.current.scale, {
+            x: 1.1,
+            y: 1.1,
+            z: 1.1,
+            duration: 0.5,
+            repeat: 1,
+            yoyo: true,
+            ease: "power2.inOut"
+          });
+        } else if (intersects.length === 0 && isHovered) {
+          isHovered = false;
+          document.body.style.cursor = 'default';
+          animationRef.current.resume();
+        }
       };
 
-      const handleMouseLeave = () => {
-        // Reprend l'animation de base
-        animationRef.current.resume();
-        
-        gsap.to(model.rotation, {
-          x: model.rotation.x,
-          z: model.rotation.z,
-          duration: 0.5,
-          ease: "power2.inOut"
-        });
-        gsap.to(model.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 0.4,
-          ease: "back.out(1.7)"
-        });
+      // Remplacer l'événement onClick existant
+      const onClick = (event) => {
+        if (!modelRef.current) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(modelRef.current, true);
+
+        if (intersects.length > 0) {
+          // Sauvegarder la position et rotation initiales
+          const initialPos = {
+            x: modelRef.current.position.x,
+            y: modelRef.current.position.y,
+            z: modelRef.current.position.z
+          };
+          const initialRot = {
+            x: modelRef.current.rotation.x,
+            y: modelRef.current.rotation.y,
+            z: modelRef.current.rotation.z
+          };
+
+          // Timeline pour le shake
+          gsap.timeline()
+            // Séquence de shakes rapides
+            .to(modelRef.current.position, {
+              x: initialPos.x - 0.02,
+              y: initialPos.y + 0.02,
+              duration: 0.05,
+              ease: "none"
+            })
+            .to(modelRef.current.position, {
+              x: initialPos.x + 0.02,
+              y: initialPos.y - 0.02,
+              duration: 0.05,
+              ease: "none"
+            })
+            .to(modelRef.current.position, {
+              x: initialPos.x - 0.015,
+              y: initialPos.y + 0.015,
+              duration: 0.05,
+              ease: "none"
+            })
+            .to(modelRef.current.position, {
+              x: initialPos.x + 0.015,
+              y: initialPos.y - 0.015,
+              duration: 0.05,
+              ease: "none"
+            })
+            .to(modelRef.current.position, {
+              x: initialPos.x - 0.01,
+              y: initialPos.y + 0.01,
+              duration: 0.05,
+              ease: "none"
+            })
+            .to(modelRef.current.position, {
+              x: initialPos.x,
+              y: initialPos.y,
+              duration: 0.05,
+              ease: "none"
+            })
+            // Petit saut final
+            .to(modelRef.current.position, {
+              y: initialPos.y + 0.05,
+              x: initialPos.x - 0.025,
+              duration: 0.2,
+              ease: "power2.out"
+            })
+            .to(modelRef.current.position, {
+              y: initialPos.y,
+              x: initialPos.x,
+              duration: 0.1,
+              ease: "bounce.out"
+            });
+        }
       };
 
-      // Ajout des événements avec capture
-      containerRef.current.addEventListener('mouseenter', handleMouseEnter, true);
-      containerRef.current.addEventListener('mouseleave', handleMouseLeave, true);
+      // Ajouter les écouteurs d'événements
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('click', onClick);
 
       return () => {
         if (containerRef.current) {
-          containerRef.current.removeEventListener('mouseenter', handleMouseEnter, true);
-          containerRef.current.removeEventListener('mouseleave', handleMouseLeave, true);
+          containerRef.current.removeChild(renderer.domElement);
         }
-        if (animationRef.current) {
-          animationRef.current.kill();
-        }
+        renderer.dispose();
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('click', onClick);
+        document.body.style.cursor = 'default';
       };
     });
 
