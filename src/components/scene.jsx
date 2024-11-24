@@ -318,7 +318,7 @@ const Scene3D = () => {
       {/* Conteneur pour tous les textes */}
       <div ref={textContainerRef} className="fixed w-full h-full z-[2] font-['RedBull']">
         {/* Titre en haut à gauche */}
-        <div className="fixed top-40 left-[17%]  ">
+        <div className="fixed top-28 left-[17%]  ">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
             Cosmic <span className="text-[#4C4A90] font-['RedBull2']">Berry</span>
           </h1>
@@ -382,45 +382,18 @@ const Scene3D = () => {
       <div className="second-section" style={{ height: '200vh' }}></div>
 
       {/* Navigation Arrows */}
-      <div className="fixed bottom-12 left-20 z-30 flex flex-col gap-4">
+      <div className="fixed bottom-12 left-20 z-30 flex flex-col gap-[-100px]">
         <button 
           onClick={scrollUp}
-          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:border-white/70 transition-all duration-300"
+          className="w-10 h-10  border-white/30 flex items-center justify-center hover:scale-110 transition-all duration-300"
         >
-          <svg 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            className="rotate-180"
-          >
-            <path 
-              d="M12 5V19M12 19L19 12M12 19L5 12" 
-              stroke="white" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src="/assets/button.svg" alt="Scroll Up" className="w-10 h-10" />
         </button>
         <button 
           onClick={scrollDown}
-          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:border-white/70 transition-all duration-300"
+          className="w-10 h-10  border-white/30 flex items-center justify-center hover:scale-110 transition-all duration-300"
         >
-          <svg 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24" 
-            fill="none"
-          >
-            <path 
-              d="M12 5V19M12 19L19 12M12 19L5 12" 
-              stroke="white" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src="/assets/button2.svg" alt="Scroll Down" className="w-10 h-10" />
         </button>
       </div>
     </>

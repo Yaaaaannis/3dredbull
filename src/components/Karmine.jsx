@@ -176,7 +176,7 @@ const Karmine = () => {
       {/* Conteneur pour les textes */}
       <div ref={textContainerRef} className="fixed w-full h-full z-[2]" style={{ visibility: 'hidden' }}>
         {/* Titre en haut à gauche */}
-        <div className="fixed top-40 left-[17%]">
+        <div className="fixed top-28 left-[17%]">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em] ">
             Karmine <span className="text-[#3ad6ff] font-bold font-['RedBull2']">Energy</span>
           </h1>
@@ -235,7 +235,7 @@ const Karmine = () => {
             muted 
             loop
             playsInline
-            style={{ filter: 'brightness(0.)' }}
+            style={{ filter: 'brightness(0.5)' }}
           >
             <source src="assets/karmine.mp4" type="video/mp4" />
           </video>

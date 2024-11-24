@@ -175,7 +175,7 @@ const Cloud = () => {
       {/* Conteneur pour les textes */}
       <div ref={textContainerRef} className="fixed w-full h-full z-[2]">
         {/* Titre en haut à gauche */}
-        <div className="fixed top-40 left-[17%]">
+        <div className="fixed top-28 left-[17%]">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
             Cloud <span className="text-[#FFD300] font-bold font-['RedBull2']">Citrus</span>
           </h1>
