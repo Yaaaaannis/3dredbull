@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { Raycaster, Vector2 } from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
@@ -44,6 +45,11 @@ const Scene3D = () => {
     renderer.setClearColor(0x000000, 0);
     containerRef.current.appendChild(renderer.domElement);
 
+    // Création du Raycaster
+    const raycaster = new Raycaster();
+    const mouse = new Vector2();
+    let isHovered = false;
+
     // Chargement du modèle GLB
     const loader = new GLTFLoader();
     loader.load('/assets/redbull.glb', (gltf) => {
@@ -51,12 +57,11 @@ const Scene3D = () => {
       modelRef.current = model;
       scene.add(model);
       
-      // Position initiale du modèle
       model.position.set(0, 0, 4.3);
       model.scale.set(1, 1, 1);
       model.rotation.y = Math.PI;
 
-      // Animation légère de rotation
+      // Animation légère de rotation (sans le cube)
       gsap.to(model.rotation, {
         x: '+=0.05',
         z: '+=0.05',
@@ -100,7 +105,7 @@ const Scene3D = () => {
         }
       });
 
-      // Animation de flottement
+      // Animation de flottement (sans le cube)
       const floatingTl = gsap.timeline({
         repeat: -1,
         yoyo: true
@@ -112,14 +117,13 @@ const Scene3D = () => {
         ease: "power1.inOut"
       });
 
-      // Animation combinée : position et rotation
+      // Animation combinée (sans le cube)
       tl.to(model.position, {
         z: 4.83,
         y: -0.09,
         duration: 1,
         ease: "power2.inOut",
         onUpdate: () => {
-          // Mettre à jour la base de l'animation de flottement
           floatingTl.invalidate().restart();
         }
       })
@@ -128,6 +132,34 @@ const Scene3D = () => {
         duration: 1,
         ease: "power2.inOut"
       }, "<");
+
+      // Déclare onMouseMove en dehors du loader
+      const onMouseMove = (event) => {
+        if (!modelRef.current) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        const intersects = raycaster.intersectObject(modelRef.current, true);
+
+        if (intersects.length > 0 && !isHovered) {
+          isHovered = true;
+          document.body.style.cursor = 'pointer';
+          gsap.to(modelRef.current.rotation, {
+            y: modelRef.current.rotation.y + Math.PI * 2,
+            duration: 1,
+            ease: "power2.inOut"
+          });
+        } else if (intersects.length === 0 && isHovered) {
+          isHovered = false;
+          document.body.style.cursor = 'default';
+        }
+      };
+
+      // Ajoute l'écouteur d'événement
+      window.addEventListener('mousemove', onMouseMove);
     });
     
 
@@ -294,13 +326,51 @@ const Scene3D = () => {
       }
     );
 
+    // Ajout de la gestion du clic
+    const onClick = (event) => {
+      if (!modelRef.current) return;
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObject(modelRef.current, true);
+
+      if (intersects.length > 0) {
+        // Animation combinée de saut et rotation
+        gsap.timeline()
+          .to(modelRef.current.position, {
+            y: modelRef.current.position.y + 0.02,
+            duration: 0.4,
+            ease: "power2.out"
+          })
+          .to(modelRef.current.rotation, {
+            y: modelRef.current.rotation.y + Math.PI * 2,
+            duration: 0.4,
+            ease: "none"
+          }, "<") // Le "<" synchronise le début avec l'animation précédente
+          .to(modelRef.current.position, {
+            y: modelRef.current.position.y,
+            duration: 0.3,
+            ease: "bounce.out"
+          });
+      }
+    };
+
+    // Ajouter l'écouteur de clic
+    window.addEventListener('click', onClick);
+
+    // Cleanup function
     return () => {
+      document.body.style.cursor = 'default';
+     
+      window.removeEventListener('click', onClick); // Ajout du cleanup pour le clic
       window.removeEventListener('resize', handleResize);
       containerRef.current?.removeChild(renderer.domElement);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
-
   return (
     <>
       {/* Video Background */}
