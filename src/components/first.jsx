@@ -9,23 +9,23 @@ export default function First() {
   const rightTextRef = useRef(null);
   const loremTextRef = useRef(null);
   const buttonRef = useRef(null);
-  const navbarRef = useRef(null);
+  const navbarContainerRef = useRef(null);
 
   useEffect(() => {
     // Animation de la navbar
     ScrollTrigger.create({
-      trigger: '.first-section', // Ajoutez cette classe à votre section principale
+      trigger: '.first-section',
       start: 'top top',
       end: 'bottom top',
       onLeave: () => {
-        gsap.to(navbarRef.current, {
+        gsap.to(navbarContainerRef.current, {
           yPercent: -100,
           duration: 0.5,
           ease: 'power2.inOut'
         });
       },
       onEnterBack: () => {
-        gsap.to(navbarRef.current, {
+        gsap.to(navbarContainerRef.current, {
           yPercent: 0,
           duration: 0.5,
           ease: 'power2.inOut'
@@ -54,25 +54,30 @@ export default function First() {
 
   return (
     <section className="relative h-screen w-screen flex flex-col items-center justify-center overflow-hidden font-['RedBull'] first-section">
-      <nav ref={navbarRef} className="fixed top-0 w-full z-50 px-16 py-8 flex justify-between items-center ">
-        {/* Bouton Menu à gauche */}
-        <button className="text-white hover:text-red-600 transition-colors relative ">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
+      {/* Navbar avec trait rouge */}
+      <div ref={navbarContainerRef} className="fixed top-0 w-full z-50">
+        <nav className="w-full px-16 pt-8 pb-4 flex justify-between items-center">
+          {/* Bouton Menu à gauche */}
+          <button className="text-white hover:text-red-600 transition-colors relative">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
 
-        {/* Bouton Recherche à droite */}
-        <button className="text-white hover:text-red-600 transition-colors">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-      </nav>
+          {/* Bouton Recherche à droite */}
+          <button className="text-white hover:text-red-600 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </nav>
+        {/* Trait rouge sous la navbar */}
+        <div className="w-full h-[2px] bg-[#B90E0A]"></div>
+      </div>
 
       {/* Traits latéraux */}
       <div className="absolute left-0 top-[30%] flex flex-col items-end z-20">
@@ -107,16 +112,16 @@ export default function First() {
         </div>
         
         {/* Texte */}
-        <p ref={loremTextRef} className="text-white text-center max-w-xl text-xl">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id ex vel tellus placerat laoreet
+        <p ref={loremTextRef} className="text-white text-center max-w-[600px] text-3xl">
+          Faites le plein d'énergie avec notre nouvelle gamme Red Bull : plus d'intensité, plus de possibilités, toujours plus loin
         </p>
         
         {/* Bouton */}
         <button 
           ref={buttonRef}
-          className="mt-8 py-4 px-10 bg-white text-black rounded-xl hover:bg-opacity-90 transition-all font-black text-xl tracking-wider"
+          className="mt-8 py-3 px-8 bg-[#B90E0A]/25 text-white rounded-lg hover:bg-[#B90E0A]/40 transition-all duration-300 font-redbull2 text-lg tracking-wide border border-white/10"
         >
-          Explore
+          Découvrir
         </button>
       </div>
     </section>

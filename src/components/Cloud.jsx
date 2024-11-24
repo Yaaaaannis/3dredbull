@@ -171,12 +171,15 @@ const Cloud = () => {
           ref={videoRef} 
           className="w-full h-full max-w-[80vw] max-h-[80vh] relative"
         >
+          {/* Ajout du filtre noir */}
+       
           <video 
             className="w-full h-full object-cover rounded-lg"
             autoPlay 
             muted 
             loop
             playsInline
+            style={{ filter: 'brightness(0.66)' }}
           >
             <source src="assets/cloud.mp4" type="video/mp4" />
           </video>

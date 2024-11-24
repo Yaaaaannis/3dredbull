@@ -152,7 +152,7 @@ const Karmine = () => {
           </p>
 
           <div className="flex items-center justify-between pt-12">
-            <button className="text-white/70 text-left hover:text-[#3ad6ff] border border-[#3ad6ff]/30 hover:border-[#3ad6ff] bg-transparent px-6 py-3 transition-all duration-300 cta-button rounded-lg cursor-pointer w-fit">
+            <button className="text-white/70 text-left hover:text-3ad6ff] border border-[#3ad6ff]/30 hover:border-[#3ad6ff] bg-transparent px-6 py-3 transition-all duration-300 cta-button rounded-lg cursor-pointer w-fit">
               En savoir plus
             </button>
             <div className="h-[2px] bg-white button-separator w-[207px]"></div>
@@ -172,6 +172,7 @@ const Karmine = () => {
             muted 
             loop
             playsInline
+            style={{ filter: 'brightness(0.)' }}
           >
             <source src="assets/karmine.mp4" type="video/mp4" />
           </video>

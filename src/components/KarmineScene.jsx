@@ -12,6 +12,7 @@ const KarmineScene = () => {
   const spotlightRef = useRef(null);
   const spotlightRef2 = useRef(null);
   const floatingAnimationRef = useRef(null);
+  const isHovered = useRef(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -146,6 +147,86 @@ const KarmineScene = () => {
       });
     });
 
+    // Fonctions de hover
+    const handleMouseEnter = () => {
+      isHovered.current = true;
+      
+      if (modelRef.current) {
+        // Animation de scale
+        gsap.to(modelRef.current.scale, {
+          x: 1.1,
+          y: 1.1,
+          z: 1.1,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+
+        // Intensification des lumières
+        if (spotlightRef.current) {
+          gsap.to(spotlightRef.current, {
+            intensity: 35,
+            duration: 0.5
+          });
+        }
+        if (spotlightRef2.current) {
+          gsap.to(spotlightRef2.current, {
+            intensity: 35,
+            duration: 0.5
+          });
+        }
+      }
+    };
+
+    const handleMouseLeave = () => {
+      isHovered.current = false;
+      
+      if (modelRef.current) {
+        // Retour à la scale normale
+        gsap.to(modelRef.current.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+
+        // Retour à l'intensité normale des lumières
+        if (spotlightRef.current) {
+          gsap.to(spotlightRef.current, {
+            intensity: 25,
+            duration: 0.5
+          });
+        }
+        if (spotlightRef2.current) {
+          gsap.to(spotlightRef2.current, {
+            intensity: 25,
+            duration: 0.5
+          });
+        }
+      }
+    };
+
+    const handleMouseMove = (event) => {
+      if (!isHovered.current || !modelRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      // Rotation douce suivant la souris
+      gsap.to(modelRef.current.rotation, {
+        x: mouseY * 0.1,
+        y: mouseX * 0.1,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    };
+
+    // Ajout des event listeners
+    containerRef.current.addEventListener('mouseenter', handleMouseEnter);
+    containerRef.current.addEventListener('mouseleave', handleMouseLeave);
+    containerRef.current.addEventListener('mousemove', handleMouseMove);
+
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
@@ -160,14 +241,22 @@ const KarmineScene = () => {
         containerRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
+      // Cleanup des event listeners
+      containerRef.current?.removeEventListener('mouseenter', handleMouseEnter);
+      containerRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+      containerRef.current?.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-screen"
-      style={{ zIndex: 20 }}
+      className="relative w-full h-screen cursor-pointer"
+      style={{ 
+        zIndex: 20,
+        position: 'relative',
+        pointerEvents: 'all',
+      }}
     />
   );
 };
