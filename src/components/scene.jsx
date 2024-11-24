@@ -325,7 +325,7 @@ const Scene3D = () => {
         </div>
 
         {/* Textes à droite */}
-        <div className="fixed right-24 top-[50%] z-20 flex flex-col gap-8 max-w-md">
+        <div className="fixed right-24 top-[40%] z-20 flex flex-col gap-8 max-w-md">
           <p 
             className="text-white text-xl main-text mb-8  transition-transform duration-300"
             onMouseEnter={() => {
@@ -342,8 +342,7 @@ const Scene3D = () => {
             de galaxies lointaines
           </p>
 
-          <div className="w-full h-[2px] bg-white separator"></div>
-
+          <div className="w-[500px] h-[2px] bg-white separator"></div>
           <p 
             className="text-white description text-xl mt-4  transition-transform duration-300"
             onMouseEnter={() => {
