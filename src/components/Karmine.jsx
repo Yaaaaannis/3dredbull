@@ -115,7 +115,7 @@ const Karmine = () => {
         {/* Titre en haut à gauche */}
         <div className="fixed top-40 left-[17%]">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
-            Karmine <span className="text-[#0094FF] font-bold">Energy</span>
+            Karmine <span className="text-[#3ad6ff] font-bold">Energy</span>
           </h1>
         </div>
 
@@ -132,7 +132,7 @@ const Karmine = () => {
               gsap.to('.description', { scale: 1, duration: 0.2 });
             }}
           >
-            L'énergie pure de la <span className="text-[#0094FF]">compétition</span> dans une canette explosive
+            L'énergie pure de la <span className="text-[#3ad6ff]">compétition</span> dans une canette explosive
           </p>
 
           <div className="w-full h-[2px] bg-white separator"></div>
@@ -148,11 +148,11 @@ const Karmine = () => {
               gsap.to('.main-text', { scale: 1, duration: 0.2 });
             }}
           >
-            Un boost <span className="text-[#0094FF]">électrisant</span> avec des notes de fruits du dragon et une touche de <span className="text-[#0094FF]">plasma glacé</span>
+            Un boost <span className="text-[#3ad6ff]">électrisant</span> avec des notes de fruits du dragon et une touche de <span className="text-[#3ad6ff]">plasma glacé</span>
           </p>
 
           <div className="flex items-center justify-between pt-12">
-            <button className="text-white/70 text-left hover:text-white border border-white/30 hover:border-white/70 bg-transparent px-6 py-3 transition-all duration-300 cta-button rounded-lg cursor-pointer w-fit">
+            <button className="text-white/70 text-left hover:text-[#3ad6ff] border border-[#3ad6ff]/30 hover:border-[#3ad6ff] bg-transparent px-6 py-3 transition-all duration-300 cta-button rounded-lg cursor-pointer w-fit">
               En savoir plus
             </button>
             <div className="h-[2px] bg-white button-separator w-[207px]"></div>

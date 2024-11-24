@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 export default function First() {
   const leftLineRef = useRef(null);
@@ -8,8 +9,30 @@ export default function First() {
   const rightTextRef = useRef(null);
   const loremTextRef = useRef(null);
   const buttonRef = useRef(null);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
+    // Animation de la navbar
+    ScrollTrigger.create({
+      trigger: '.first-section', // Ajoutez cette classe à votre section principale
+      start: 'top top',
+      end: 'bottom top',
+      onLeave: () => {
+        gsap.to(navbarRef.current, {
+          yPercent: -100,
+          duration: 0.5,
+          ease: 'power2.inOut'
+        });
+      },
+      onEnterBack: () => {
+        gsap.to(navbarRef.current, {
+          yPercent: 0,
+          duration: 0.5,
+          ease: 'power2.inOut'
+        });
+      }
+    });
+
     // Animation des traits
     gsap.fromTo(leftLineRef.current,
       { width: 0 },
@@ -30,7 +53,27 @@ export default function First() {
   }, []);
 
   return (
-    <section className="relative h-screen w-screen flex flex-col items-center justify-center overflow-hidden font-['RedBull']">
+    <section className="relative h-screen w-screen flex flex-col items-center justify-center overflow-hidden font-['RedBull'] first-section">
+      <nav ref={navbarRef} className="fixed top-0 w-full z-50 px-16 py-8 flex justify-between items-center ">
+        {/* Bouton Menu à gauche */}
+        <button className="text-white hover:text-red-600 transition-colors relative ">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </button>
+
+        {/* Bouton Recherche à droite */}
+        <button className="text-white hover:text-red-600 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </nav>
+
       {/* Traits latéraux */}
       <div className="absolute left-0 top-[30%] flex flex-col items-end z-20">
         <div ref={leftLineRef} className="w-56 h-px bg-white"></div>
