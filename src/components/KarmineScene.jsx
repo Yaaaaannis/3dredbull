@@ -14,11 +14,15 @@ const KarmineScene = () => {
   const floatingAnimationRef = useRef(null);
   const isHovered = useRef(false);
 
+  // Déclarer camera en dehors du loader pour qu'elle soit accessible
+  let camera;
+
   useEffect(() => {
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
     if (!containerRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ 
       alpha: true,
       antialias: true 
@@ -74,6 +78,10 @@ const KarmineScene = () => {
     scene.add(pointLight2);
 
     camera.position.z = 5;
+
+    // Déplacer ces déclarations en dehors du loader
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
     // Chargement de la canette
     const loader = new GLTFLoader();

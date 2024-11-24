@@ -241,7 +241,7 @@ const Karmine = () => {
           </video>
         </div>
         <div 
-          className="absolute inset-0 z-100" 
+          className="absolute inset-0 z-50" 
           style={{ 
             height: '100vh',
             width: '100vw',
