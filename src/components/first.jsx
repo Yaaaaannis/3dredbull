@@ -108,7 +108,7 @@ export default function First() {
       <div className="relative z-10 flex flex-col items-center gap-8 pb-20">
         {/* Logo RedBull */}
         <div className="flex flex-col items-center gap-4">
-          <img src="/assets/redbulls.png" alt="Red Bull Logo" className="w-96" />
+          <img src="/assets/logo.svg" alt="Red Bull Logo" className="w-96" />
         </div>
         
         {/* Texte */}

@@ -316,11 +316,11 @@ const Scene3D = () => {
       </video>
 
       {/* Conteneur pour tous les textes */}
-      <div ref={textContainerRef} className="fixed w-full h-full z-[2] ">
+      <div ref={textContainerRef} className="fixed w-full h-full z-[2] font-['RedBull']">
         {/* Titre en haut à gauche */}
         <div className="fixed top-40 left-[17%]  ">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
-            Cosmic <span className="text-[#4C4A90]">Berry</span>
+            Cosmic <span className="text-[#4C4A90] font-['RedBull2']">Berry</span>
           </h1>
         </div>
 

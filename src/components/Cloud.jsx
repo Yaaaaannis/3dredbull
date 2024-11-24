@@ -111,7 +111,7 @@ const Cloud = () => {
   return (
     <div 
       ref={containerRef} 
-      className="min-h-[180vh] w-full bg-transparent relative font-redbull2 z-100 fixed"
+      className="min-h-[180vh] w-full bg-transparent relative font-['RedBull'] z-100 fixed "
       style={{ opacity: 0 }}
     >
       {/* Conteneur pour les textes */}
@@ -119,7 +119,7 @@ const Cloud = () => {
         {/* Titre en haut à gauche */}
         <div className="fixed top-40 left-[17%]">
           <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
-            Cloud <span className="text-[#FFD300] font-bold">Citrus</span>
+            Cloud <span className="text-[#FFD300] font-bold font-['RedBull2']">Citrus</span>
           </h1>
         </div>
 

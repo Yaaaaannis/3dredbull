@@ -121,7 +121,7 @@ const KarmineScene = () => {
 
             // Intensité des lumières
             const spotlightIntensity = gsap.utils.interpolate(0, 25, progress);
-            const frontSpotlightIntensity = gsap.utils.interpolate(0, 15, progress); // Intensité plus faible pour la lumière frontale
+            const frontSpotlightIntensity = gsap.utils.interpolate(0, 2, progress); // Intensité plus faible pour la lumière frontale
             const pointLightIntensity = gsap.utils.interpolate(0, 8, progress);
             
             if (spotlightRef.current) {

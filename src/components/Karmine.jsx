@@ -45,8 +45,8 @@ const Karmine = () => {
     const textsTl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top+=40% center',
-        end: '+=80%',
+        start: 'top+=20% center',
+        end: '+=60%',
         scrub: 1,
       }
     });
@@ -107,15 +107,15 @@ const Karmine = () => {
   return (
     <div 
       ref={containerRef} 
-      className="min-h-[180vh] w-full bg-transparent relative font-redbull2 z-100 fixed"
+      className="min-h-[180vh] w-full bg-transparent relative font-redbull2 z-100 font-['RedBull']"
       style={{ opacity: 0 }}
     >
       {/* Conteneur pour les textes */}
-      <div ref={textContainerRef} className="fixed w-full h-full z-[2]">
+      <div ref={textContainerRef} className="fixed w-full h-full z-[2]" style={{ visibility: 'hidden' }}>
         {/* Titre en haut à gauche */}
         <div className="fixed top-40 left-[17%]">
-          <h1 className="text-4xl text-white title font-demibold tracking-[0.03em]">
-            Karmine <span className="text-[#3ad6ff] font-bold">Energy</span>
+          <h1 className="text-4xl text-white title font-demibold tracking-[0.03em] ">
+            Karmine <span className="text-[#3ad6ff] font-bold font-['RedBull2']">Energy</span>
           </h1>
         </div>
 
